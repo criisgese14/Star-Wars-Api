@@ -3,7 +3,7 @@ import { HydratedDocument } from 'mongoose';
 
 export type FilmDocument = HydratedDocument<Film>;
 
-@Schema()
+@Schema({timestamps: {createdAt: 'created', updatedAt: 'updated'}})
 export class Film {
     @Prop()
     title: string;
@@ -22,6 +22,7 @@ export class Film {
 
     @Prop()
     release_date: Date;
+
 }
 
 export const FilmSchema = SchemaFactory.createForClass(Film);

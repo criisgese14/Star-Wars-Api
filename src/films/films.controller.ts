@@ -1,32 +1,38 @@
-import { Controller, Get, Param, Post, Put, Delete } from '@nestjs/common';
+import { Controller, Get, Param, Post, Put, Delete, Body } from '@nestjs/common';
+import { CreateFilmDto } from './dto/createFilm.dto';
+import { EditFilmDto } from './dto/editFilm.dto';
 import { FilmsService } from './films.service';
+import { ApiTags} from '@nestjs/swagger';
+import { FilmDocument } from './schema/films.schema';
+import { deleteFilm } from './interface/deleteFilm.interface';
 
+@ApiTags('Films endpoint')
 @Controller('films')
 export class FilmsController {
-    constructor(private readonly filmsService: FilmsService) {}
+    constructor(private readonly filmsService: FilmsService) {};
     
     @Get()
-    getFilms(): string {
-        return "esta ruta debe traer todas las películas"
+    getFilms(): Promise<FilmDocument[]>{
+        return this.filmsService.getFilms();
     };
 
     @Get('/:id')
-    getFilm(@Param() params): string {
-        return "soy la ruta /film/" + params.id;
+    getFilm(@Param('id') filmId:string): Promise<FilmDocument>{
+        return this.filmsService.getFilm(filmId);
     };
 
     @Post()
-    postFilm(): string {
-        return this.filmsService.createFilm()
+    postFilm(@Body() newFilm: CreateFilmDto): Promise<FilmDocument>{
+        return this.filmsService.createFilm(newFilm);
     };
 
     @Put("/:id")
-    putFilm(): string {
-        return "pelicula modificada"
+    putFilm(@Param('id') filmId:string, @Body() updateFilm: EditFilmDto): Promise<FilmDocument>{
+        return this.filmsService.updateFilm(filmId, updateFilm);
     }
 
     @Delete("/:id")
-    deleteFilm(): string {
-        return "pelicula eliminada"
-    }
+    deleteFilm(@Param('id') filmId:string): Promise<deleteFilm>{
+        return this.filmsService.deleteFilm(filmId);
+    };
 };
