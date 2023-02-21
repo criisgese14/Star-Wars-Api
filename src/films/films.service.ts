@@ -10,45 +10,93 @@ import { deleteFilm } from './interface/deleteFilm.interface';
 export class FilmsService {
     constructor(@InjectModel(Film.name) private filmModel: Model<FilmDocument>) {};
 
-    async getFilms(): Promise<FilmDocument[]>{
+    async getAllFilms(): Promise<FilmDocument[]>{
+        try {
+            
+            const films = await this.filmModel.find();
 
-        const films = await this.filmModel.find();
-        
-        return films;
+            if(!films.length) {
+                throw new Error;
+            };
+            
+            return films;
+
+        } catch (error) {
+            
+            throw new NotFoundException({
+                statusCode: 404,
+                message: "The Database Is Empty Or Not Exist",
+                error: "Not Found"
+            });
+
+        };
     };
 
     async getFilm(filmId: string): Promise<FilmDocument>{
-        
-        const film = await this.filmModel.findById(filmId);
+        try {
+            
+            const film = await this.filmModel.findById(filmId);
+            return film;
 
-        if (!film) throw new NotFoundException();
+        } catch (error) {
+          
+            throw new NotFoundException({
+                statusCode: 404,
+                message: "Invalid Id. Film not Found",
+                error: "Not Found"
+            });
 
-        return film;
+        };
     };
 
     async createFilm(newFilm: CreateFilmDto): Promise<FilmDocument>{
-        
-        const film = await this.filmModel.create(newFilm);
-        
-        await film.save();
-        
-        return film;
+        try {
+            
+            const film = await this.filmModel.create(newFilm);
+            await film.save();
+            return film;
+
+        } catch (error) {
+
+            console.log(error);
+            
+        };
     };
 
     async updateFilm(filmId: string, film: EditFilmDto): Promise<FilmDocument>{
-        
-        const updatedFilm = await this.filmModel.findByIdAndUpdate(filmId, film, {new: true});
-        
-        return updatedFilm;
+        try {
+            
+            const updatedFilm = await this.filmModel.findByIdAndUpdate(filmId, film, {new: true});
+            return updatedFilm;
+
+        } catch (error) {
+
+            throw new NotFoundException({
+                statusCode: 404,
+                message: "Invalid ID. Film To Update Not Found",
+                error: "Not Found"
+            });
+            
+        };
     };
 
     async deleteFilm(filmId: string): Promise<deleteFilm>{
-        
-        await this.filmModel.findByIdAndDelete(filmId);
-        
-        return {
-            statusCode: 200,
-            message: "film deleted succesfully"
+        try {
+            
+            await this.filmModel.findByIdAndDelete(filmId);
+            return {
+                statusCode: 200,
+                message: "Film Deleted Succesfully"
+            };
+
+        } catch (error) {
+
+            throw new NotFoundException({
+                statusCode: 404,
+                message: "Invalid ID. The Film To Delete Does Not Exist Or Has Already Been Deleted",
+                error: "Not Found",
+            });
+            
         };
     };
 };
