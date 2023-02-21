@@ -1,25 +1,50 @@
+import { Model } from 'mongoose';
 import { Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Starship, StarshipDocument } from './schema/starships.schema';
+import { CreateStarshipDto } from './dto/CreateStarship.dto';
+import { EditStarshipDto } from './dto/EditStarship.dto';
+import { deleteStarship } from './interface/deleteStarship.interface';
 
 @Injectable()
 export class StarshipsService {
+    constructor(@InjectModel(Starship.name) private starshipModel: Model<StarshipDocument>) {};
 
-    getAllStarships() {
-        return 'this route must return all starships'
+    async getAllStarships(): Promise<StarshipDocument[]> {
+
+        const starships = await this.starshipModel.find();
+
+        return starships;
+    };
+
+    async getStarship(starshipId: string): Promise<StarshipDocument> {
+
+        const starship = await this.starshipModel.findById(starshipId);
+        
+        return starship;
+    };
+
+    async createStarship(newStarship: CreateStarshipDto): Promise<StarshipDocument> {
+        
+        const starship = await this.starshipModel.create(newStarship);
+
+        return starship;
     }
 
-    getStarship(starshipId: string) {
-        return 'this route must return a starship'
+    async updateStarship(starshipId: string, starship: EditStarshipDto): Promise<StarshipDocument> {
+
+        const updatedStarship = await this.starshipModel.findByIdAndUpdate(starshipId, starship, {new: true});
+
+        return updatedStarship;
     }
 
-    createStarship(newStarship) {
-        return 'starship created successfully'
-    }
+    async deleteStarship(starshipId: string): Promise<deleteStarship>{
 
-    updateStarship(starshipId: string, starship) {
-        return 'starship updated successfully'
-    }
+        await this.starshipModel.findByIdAndDelete(starshipId);
 
-    deleteStarship(starshipId: string){
-        return 'starship deleted successfully'
+        return {
+            statusCode: 200,
+            message: 'starship deleted successfully'
+        };
     }
 }
