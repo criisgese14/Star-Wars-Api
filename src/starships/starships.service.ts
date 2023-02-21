@@ -14,11 +14,7 @@ export class StarshipsService {
         try {
 
             const starships = await this.starshipModel.find();
-            
-            if(!starships.length) {
-                throw new Error;
-            };
-
+            if(!starships.length) throw new Error;
             return starships;
 
         } catch (error) {
@@ -36,6 +32,7 @@ export class StarshipsService {
         try {
 
             const starship = await this.starshipModel.findById(starshipId);
+            if(!starship) throw new Error;
             return starship;
             
         } catch (error) {
@@ -67,6 +64,7 @@ export class StarshipsService {
         try {
             
             const updatedStarship = await this.starshipModel.findByIdAndUpdate(starshipId, starship, {new: true});
+            if(!updatedStarship) throw new Error;
             return updatedStarship;
 
         } catch (error) {
@@ -83,7 +81,8 @@ export class StarshipsService {
     async deleteStarship(starshipId: string): Promise<deleteStarship>{
         try {
             
-            await this.starshipModel.findByIdAndDelete(starshipId);
+            const deletedStarship = await this.starshipModel.findByIdAndDelete(starshipId);
+            if(!deletedStarship) throw new Error;
             return {
                 statusCode: 200,
                 message: 'Starship Deleted Successfully'

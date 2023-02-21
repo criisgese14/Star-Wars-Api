@@ -15,11 +15,7 @@ export class PlanetsService {
         try {
             
             const planets = await this.planetModel.find();
-
-            if(!planets.length) {
-                throw new Error;
-            };
-
+            if(!planets.length) throw new Error;
             return planets;
 
         } catch (error) {
@@ -37,6 +33,7 @@ export class PlanetsService {
         try {
             
             const planet = await this.planetModel.findById(planetId);
+            if (!planet) throw new Error;
             return planet;
 
         } catch (error) {
@@ -68,6 +65,7 @@ export class PlanetsService {
         try {
             
             const updatedPlanet = await this.planetModel.findByIdAndUpdate(planetId, planet, {new: true});
+            if (!updatedPlanet) throw new Error;
             return updatedPlanet;
 
         } catch (error) {
@@ -84,7 +82,8 @@ export class PlanetsService {
     async deletePlanet(planetId: string): Promise<deletePlanet>{
         try {
             
-            await this.planetModel.findByIdAndDelete(planetId);
+            const deletedPlanet = await this.planetModel.findByIdAndDelete(planetId);
+            if (!deletedPlanet) throw new Error;
             return {
                 statusCode: 200,
                 message: 'Planet Deleted Successfully'

@@ -14,11 +14,7 @@ export class FilmsService {
         try {
             
             const films = await this.filmModel.find();
-
-            if(!films.length) {
-                throw new Error;
-            };
-            
+            if(!films.length) throw new Error;
             return films;
 
         } catch (error) {
@@ -36,6 +32,7 @@ export class FilmsService {
         try {
             
             const film = await this.filmModel.findById(filmId);
+            if(!film) throw new Error;
             return film;
 
         } catch (error) {
@@ -67,6 +64,7 @@ export class FilmsService {
         try {
             
             const updatedFilm = await this.filmModel.findByIdAndUpdate(filmId, film, {new: true});
+            if(!updatedFilm) throw new Error;
             return updatedFilm;
 
         } catch (error) {
@@ -83,7 +81,8 @@ export class FilmsService {
     async deleteFilm(filmId: string): Promise<deleteFilm>{
         try {
             
-            await this.filmModel.findByIdAndDelete(filmId);
+            const deletedFilm = await this.filmModel.findByIdAndDelete(filmId);
+            if(!deletedFilm) throw new Error;
             return {
                 statusCode: 200,
                 message: "Film Deleted Succesfully"
