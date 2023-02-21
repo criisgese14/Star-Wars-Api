@@ -6,14 +6,14 @@ import { ApiTags} from '@nestjs/swagger';
 import { FilmDocument } from './schema/films.schema';
 import { deleteFilm } from './interface/deleteFilm.interface';
 
-@ApiTags('Films endpoint')
+@ApiTags('Films Endpoints')
 @Controller('films')
 export class FilmsController {
     constructor(private readonly filmsService: FilmsService) {};
     
     @Get()
     getFilms(): Promise<FilmDocument[]>{
-        return this.filmsService.getFilms();
+        return this.filmsService.getAllFilms();
     };
 
     @Get('/:id')

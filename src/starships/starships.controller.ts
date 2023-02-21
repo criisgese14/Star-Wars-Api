@@ -1,10 +1,12 @@
 import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { CreateStarshipDto } from './dto/CreateStarship.dto';
 import { EditStarshipDto } from './dto/EditStarship.dto';
 import { deleteStarship } from './interface/deleteStarship.interface';
 import { StarshipDocument } from './schema/starships.schema';
 import { StarshipsService } from './starships.service';
 
+@ApiTags('Starships Endpoints')
 @Controller('starships')
 export class StarshipsController {
     constructor(private readonly starshipsService: StarshipsService) {};
