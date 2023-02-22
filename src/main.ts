@@ -1,5 +1,6 @@
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
+import helmet from 'helmet';
 import { AppModule } from './app.module';
 import { initSwagger } from './app.swagger';
 
@@ -19,6 +20,8 @@ async function bootstrap() {
       whitelist: false,
     }),
   );
+
+  app.use(helmet());
   
   await app.listen(port);
 
