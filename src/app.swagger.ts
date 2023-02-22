@@ -7,7 +7,6 @@ export const initSwagger = (app: INestApplication) => {
     .setTitle('Star Wars API')
     .setDescription('API con temática de star wars desarrollada con nest.js y typeScript')
     .setVersion('1.0')
-    .addTag('star-wars')
     .build();
 
     const document = SwaggerModule.createDocument(app, config);
