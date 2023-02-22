@@ -108,7 +108,7 @@ export class Starship {
         description: 'updated date of the starship',
     })
     @Prop({type: Date})
-    updated: Date;
+    edited: Date;
 };
 
 export const StarshipSchema = SchemaFactory.createForClass(Starship);

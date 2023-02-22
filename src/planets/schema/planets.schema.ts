@@ -5,7 +5,7 @@ import { HydratedDocument } from "mongoose";
 
 export type PlanetDocument = HydratedDocument<Planet>;
 
-@Schema({timestamps: {createdAt: 'created', updatedAt: 'updated'}})
+@Schema({timestamps: {createdAt: 'created', updatedAt: 'edited'}})
 export class Planet {
     @ApiProperty({
         description: 'title of the planet',
@@ -80,7 +80,7 @@ export class Planet {
         description: 'updated date of the planet',
     })
     @Prop({type: Date})
-    updated: Date;
+    edited: Date;
 };
 
 export const PlanetSchema = SchemaFactory.createForClass(Planet);

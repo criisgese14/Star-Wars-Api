@@ -5,7 +5,7 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export type FilmDocument = HydratedDocument<Film>;
 
-@Schema({timestamps: {createdAt: 'created', updatedAt: 'updated'}})
+@Schema({timestamps: {createdAt: 'created', updatedAt: 'edited'}})
 export class Film {
 
     @ApiProperty({
@@ -60,7 +60,7 @@ export class Film {
         description: 'updated date of the film',
     })
     @Prop({type: Date})
-    updated: Date;
+    edited: Date;
 
 }
 
